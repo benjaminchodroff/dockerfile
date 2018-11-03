@@ -9,7 +9,12 @@ ENV SS_LIBEV_VERSION 3.2.0
 ENV KCP_VERSION 20180926
 ENV SS_DOWNLOAD_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v${SS_LIBEV_VERSION}/shadowsocks-libev-${SS_LIBEV_VERSION}.tar.gz
 ENV OBFS_DOWNLOAD_URL https://github.com/shadowsocks/simple-obfs.git
-ENV KCP_DOWNLOAD_URL https://github.com/xtaci/kcptun/releases/download/v${KCP_VERSION}/kcptun-linux-amd64-${KCP_VERSION}.tar.gz
+ENV ARCHITECTURE="amd64"
+ENV ARCHVERSION=""
+# If on raspberry pi, replace with these values
+#ENV ARCHITECTURE="arm"
+#ENV ARCHVERSION=7"
+ENV KCP_DOWNLOAD_URL https://github.com/xtaci/kcptun/releases/download/v${KCP_VERSION}/kcptun-linux-${ARCHITECTURE}-${KCP_VERSION}.tar.gz
 
 RUN apk upgrade \
     && apk add bash tzdata libsodium rng-tools \
@@ -41,9 +46,9 @@ RUN apk upgrade \
     && ./autogen.sh && ./configure --disable-documentation\
     && make && make install) \
     && curl -sSLO ${KCP_DOWNLOAD_URL} \
-    && tar -zxf kcptun-linux-amd64-${KCP_VERSION}.tar.gz \
-    && mv server_linux_amd64 /usr/bin/kcpserver \
-    && mv client_linux_amd64 /usr/bin/kcpclient \
+    && tar -zxf kcptun-linux-${ARCHITECTURE}-${KCP_VERSION}.tar.gz \
+    && mv server_linux_${ARCHITECTURE}${ARCHVERSION} /usr/bin/kcpserver \
+    && mv client_linux_${ARCHITECTURE}${ARCHVERSION} /usr/bin/kcpclient \
     && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && runDeps="$( \
@@ -54,7 +59,7 @@ RUN apk upgrade \
         )" \
     && apk add --virtual .run-deps $runDeps \
     && apk del .build-deps \
-    && rm -rf kcptun-linux-amd64-${KCP_VERSION}.tar.gz \
+    && rm -rf kcptun-linux-${ARCHITECTURE}-${KCP_VERSION}.tar.gz \
         shadowsocks-libev-${SS_LIBEV_VERSION}.tar.gz \
         shadowsocks-libev-${SS_LIBEV_VERSION} \
         simple-obfs \
