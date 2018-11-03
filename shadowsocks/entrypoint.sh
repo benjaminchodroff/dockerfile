@@ -1,10 +1,12 @@
 #!/bin/bash
 
-SS_CONFIG=${SS_CONFIG:-""}
+PORT=8388
+PASS=88888888
+SS_CONFIG=${SS_CONFIG:-"-s 0.0.0.0 -p $PORT -m salsa20 -k $PASS --fast-open --no-delay --plugin obfs-server --plugin-opts 'obfs=http'"}
 SS_MODULE=${SS_MODULE:-"ss-server"}
-KCP_CONFIG=${KCP_CONFIG:-""}
+KCP_CONFIG=${KCP_CONFIG:-"-t 0.0.0.0:$PORT -l :$PORT -mode fast2 -key $PASS -crypt salsa20"}
 KCP_MODULE=${KCP_MODULE:-"kcpserver"}
-KCP_FLAG=${KCP_FLAG:-"false"}
+KCP_FLAG=${KCP_FLAG:-"true"}
 
 while getopts "s:m:k:e:x" OPT; do
     case $OPT in
