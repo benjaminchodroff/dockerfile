@@ -13,7 +13,7 @@ ENV ARCHITECTURE="amd64"
 ENV ARCHVERSION=""
 # If on raspberry pi, replace with these values
 #ENV ARCHITECTURE="arm"
-#ENV ARCHVERSION=7"
+#ENV ARCHVERSION="7"
 ENV KCP_DOWNLOAD_URL https://github.com/xtaci/kcptun/releases/download/v${KCP_VERSION}/kcptun-linux-${ARCHITECTURE}-${KCP_VERSION}.tar.gz
 
 RUN apk upgrade \
